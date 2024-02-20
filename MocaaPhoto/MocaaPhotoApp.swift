@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+
 @main
 struct MocaaPhotoApp: App {
     var sharedModelContainer: ModelContainer = {
@@ -25,7 +26,7 @@ struct MocaaPhotoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MocaaAddView()
         }
         .modelContainer(sharedModelContainer)
     }

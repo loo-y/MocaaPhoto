@@ -17,8 +17,19 @@ final class PhotoPickerViewModel: ObservableObject{
 }
 
 struct MocaaAddView: View {
+    
+    @StateObject private var viewModel = PhotoPickerViewModel()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .center, spacing: 0) {
+            Text("hello MocaaPhoto")
+            
+            VStack(content: {
+                /*@START_MENU_TOKEN@*/Text("Placeholder")/*@END_MENU_TOKEN@*/
+            })
+            .padding(.all)
+        }
+        .padding(.all, 10.0)
     }
 }
 

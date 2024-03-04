@@ -15,6 +15,8 @@
 		F20F73142B84EB7500705E08 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F73132B84EB7500705E08 /* File.swift */; };
 		F20F73162B84EBBB00705E08 /* MocaaAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F73152B84EBBB00705E08 /* MocaaAddView.swift */; };
 		F20F73182B84F3C000705E08 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F20F73172B84F3C000705E08 /* README.md */; };
+		F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22062B9609E800D33EA5 /* MocaaView.swift */; };
+		F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22082B960C1B00D33EA5 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		F20F73132B84EB7500705E08 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		F20F73152B84EBBB00705E08 /* MocaaAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocaaAddView.swift; sourceTree = "<group>"; };
 		F20F73172B84F3C000705E08 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		F26C22062B9609E800D33EA5 /* MocaaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocaaView.swift; sourceTree = "<group>"; };
+		F26C22082B960C1B00D33EA5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,8 @@
 			isa = PBXGroup;
 			children = (
 				F20F73022B839FC200705E08 /* MocaaPhotoApp.swift */,
+				F26C22062B9609E800D33EA5 /* MocaaView.swift */,
+				F26C22082B960C1B00D33EA5 /* ImagePicker.swift */,
 				F20F73042B839FC200705E08 /* ContentView.swift */,
 				F20F73132B84EB7500705E08 /* File.swift */,
 				F20F73152B84EBBB00705E08 /* MocaaAddView.swift */,
@@ -155,7 +161,9 @@
 				F20F73052B839FC200705E08 /* ContentView.swift in Sources */,
 				F20F73142B84EB7500705E08 /* File.swift in Sources */,
 				F20F73162B84EBBB00705E08 /* MocaaAddView.swift in Sources */,
+				F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */,
 				F20F73072B839FC200705E08 /* Item.swift in Sources */,
+				F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */,
 				F20F73032B839FC200705E08 /* MocaaPhotoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

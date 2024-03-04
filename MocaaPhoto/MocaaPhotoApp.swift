@@ -26,7 +26,7 @@ struct MocaaPhotoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MocaaAddView()
+            MocaaView()
         }
         .modelContainer(sharedModelContainer)
     }

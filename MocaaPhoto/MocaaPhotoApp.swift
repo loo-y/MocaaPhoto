@@ -23,11 +23,36 @@ struct MocaaPhotoApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+    @StateObject private var viewModel = AppViewModel()
+    
     var body: some Scene {
         WindowGroup {
             MocaaView()
+                .environmentObject(viewModel)
+        }
+        .commands {
+            CommandMenu("File") {
+                Button("Save") {
+                    // 这里调用你的保存逻辑
+//                    saveAction()
+                    viewModel.triggerSave()
+                }
+                .keyboardShortcut("s", modifiers: .command) // 添加快捷键 Command + S
+            }
         }
         .modelContainer(sharedModelContainer)
+    }
+    
+    func saveAction() {
+        
+    }
+}
+
+
+class AppViewModel: ObservableObject {
+    @Published var triggerSaveAction: Bool = false
+
+    func triggerSave() {
+        triggerSaveAction.toggle()
     }
 }

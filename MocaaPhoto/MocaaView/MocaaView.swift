@@ -9,19 +9,21 @@ import SwiftUI
 import AppKit
 
 struct MocaaView: View {
+    @State private var aspectRatioWidth: CGFloat = 16
+    @State private var aspectRatioHeight: CGFloat = 9
     @State private var ximage: NSImage?
     @State private var showingImagePicker = false
     @State private var outputImage: NSImage?
     @State private var backgroundImage: NSImage?
     @State private var windowSize: CGSize = .zero
-    @State private var imagePadding: CGFloat = 180
+    @State private var imagePadding: CGFloat = 300
     @EnvironmentObject var viewModel: AppViewModel
     // 将imageStore设置为环境对象
     @EnvironmentObject var imageStore: ImageStore
 
     func createOutputImage(image: NSImage) -> NSImage {
         let size = NSSize(width: 600, height: 400)
-        let blurredImage = image.blurred(radius: 10)
+        let blurredImage = image.blurredOutput(radius: 10)
         let canvas = NSImage(size: size)
         canvas.lockFocus()
 
@@ -49,7 +51,9 @@ struct MocaaView: View {
     
     var body: some View {
         GeometryReader { geometry in
+            Color.black
             VStack(alignment: .center){
+                
                 if imageStore.currentImage != nil {
                     ZStack {
                         if let backgroundImage = backgroundImage {
@@ -70,8 +74,10 @@ struct MocaaView: View {
                         
                         if let image = imageStore.currentImage {
                             let aspectRatio = image.size.width / image.size.height
-                            let imageWidth = min(geometry.size.width - imagePadding, aspectRatio * (geometry.size.height - imagePadding ))
-                            let imageHeight = min(geometry.size.height - imagePadding, (geometry.size.width - imagePadding) / aspectRatio)
+                            let aspectedHeight = geometry.size.width * self.aspectRatioHeight / self.aspectRatioWidth
+                            let imagePadding = aspectedHeight * 0.2
+                            let imageWidth = aspectRatio * (aspectedHeight - imagePadding ) // min(geometry.size.width - imagePadding, aspectRatio * (aspectedHeight - imagePadding ))
+                            let imageHeight = aspectedHeight - imagePadding // min(aspectedHeight - imagePadding, (geometry.size.width - imagePadding) / aspectRatio)
 
 
                             ZStack {
@@ -96,12 +102,12 @@ struct MocaaView: View {
                         showingImagePicker = true
                     }
                     
-                    Button("Export") {
-                        if let image = imageStore.currentImage {
-                            let outputImage = createOutputImage(image: image)
-                            saveImageToDisk(image: outputImage)
-                        }
-                    }
+//                    Button("Export") {
+//                        if let image = imageStore.currentImage {
+//                            let outputImage = createOutputImage(image: image)
+//                            saveImageToDisk(image: outputImage)
+//                        }
+//                    }
                 } else {
                     VStack(alignment: .center){
                         Button("Import Image") {
@@ -115,11 +121,17 @@ struct MocaaView: View {
                         
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    .background(Color.black)
+//                    .background(Color.black)
                     
                 }
                 
             }
+            .frame(width: geometry.size.width, height: geometry.size.width * self.aspectRatioHeight / self.aspectRatioWidth) // 设置VStack保持16:9的比例
+            .clipped() // 如果VStack里的内容超出了设置的宽高，剪裁掉超出的部分
+            .background(Color.black) // 给VStack设置背景色为黑色
+            .position(x: geometry.size.width / 2, y: geometry.size.height / 2) // 将VStack居中显示
+            
+            
             .sheet(isPresented: $showingImagePicker) {
                 
                 ImagePicker(image: self.$imageStore.currentImage)
@@ -132,8 +144,9 @@ struct MocaaView: View {
                     }
                     .onDisappear {
                         print("this is disappear")
+                        showingImagePicker = false
                         if let image = imageStore.currentImage {
-                            self.backgroundImage = image.blurred(radius: 70)
+                            self.backgroundImage = image.blurred(radius: 50)
                         }
                     }
                 // Sheet的内容
@@ -146,6 +159,7 @@ struct MocaaView: View {
             }
         }
         .padding(0.0)
+        .edgesIgnoringSafeArea(.all) // 忽略安全区域，让背景色填满整个屏幕
 //        .onChange(of: viewModel.triggerSaveAction) { _ in
 //            print("trigger save")
 //            DispatchQueue.main.async {
@@ -154,14 +168,14 @@ struct MocaaView: View {
 //                    self.saveImageToDisk(image: outputImage)
 //                }
 //            }
-//            
+//
 //        }
     }
     
 }
 
 extension NSImage {
-    func blurred(radius: CGFloat) -> NSImage {
+    func blurredOutput(radius: CGFloat) -> NSImage {
         guard let cgImage = self.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
             return self
         }

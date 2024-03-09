@@ -13,6 +13,9 @@
 		F20F73142B84EB7500705E08 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F73132B84EB7500705E08 /* File.swift */; };
 		F20F73182B84F3C000705E08 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F20F73172B84F3C000705E08 /* README.md */; };
 		F241A91D2B9C41DE00181611 /* SidePannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A91C2B9C41DE00181611 /* SidePannel.swift */; };
+		F241A91F2B9C80D900181611 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A91E2B9C80D900181611 /* ContentView.swift */; };
+		F241A9212B9C814400181611 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9202B9C814400181611 /* ImageView.swift */; };
+		F241A9232B9C815300181611 /* FunctionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9222B9C815300181611 /* FunctionView.swift */; };
 		F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22062B9609E800D33EA5 /* MocaaView.swift */; };
 		F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22082B960C1B00D33EA5 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
@@ -26,6 +29,9 @@
 		F20F73132B84EB7500705E08 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		F20F73172B84F3C000705E08 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F241A91C2B9C41DE00181611 /* SidePannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePannel.swift; sourceTree = "<group>"; };
+		F241A91E2B9C80D900181611 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F241A9202B9C814400181611 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		F241A9222B9C815300181611 /* FunctionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionView.swift; sourceTree = "<group>"; };
 		F26C22062B9609E800D33EA5 /* MocaaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocaaView.swift; sourceTree = "<group>"; };
 		F26C22082B960C1B00D33EA5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -61,9 +67,9 @@
 		F20F73012B839FC200705E08 /* MocaaPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				F241A9252B9C8CF000181611 /* MocaaView */,
+				F241A9242B9C8AA500181611 /* ImageContent */,
 				F20F73022B839FC200705E08 /* MocaaPhotoApp.swift */,
-				F26C22062B9609E800D33EA5 /* MocaaView.swift */,
-				F241A91C2B9C41DE00181611 /* SidePannel.swift */,
 				F26C22082B960C1B00D33EA5 /* ImagePicker.swift */,
 				F20F73132B84EB7500705E08 /* File.swift */,
 				F20F73082B839FC400705E08 /* Assets.xcassets */,
@@ -79,6 +85,25 @@
 				F20F730B2B839FC400705E08 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F241A9242B9C8AA500181611 /* ImageContent */ = {
+			isa = PBXGroup;
+			children = (
+				F241A91E2B9C80D900181611 /* ContentView.swift */,
+				F241A9202B9C814400181611 /* ImageView.swift */,
+				F241A9222B9C815300181611 /* FunctionView.swift */,
+			);
+			path = ImageContent;
+			sourceTree = "<group>";
+		};
+		F241A9252B9C8CF000181611 /* MocaaView */ = {
+			isa = PBXGroup;
+			children = (
+				F26C22062B9609E800D33EA5 /* MocaaView.swift */,
+				F241A91C2B9C41DE00181611 /* SidePannel.swift */,
+			);
+			path = MocaaView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,8 +179,11 @@
 			files = (
 				F20F73142B84EB7500705E08 /* File.swift in Sources */,
 				F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */,
+				F241A91F2B9C80D900181611 /* ContentView.swift in Sources */,
 				F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */,
 				F241A91D2B9C41DE00181611 /* SidePannel.swift in Sources */,
+				F241A9212B9C814400181611 /* ImageView.swift in Sources */,
+				F241A9232B9C815300181611 /* FunctionView.swift in Sources */,
 				F20F73032B839FC200705E08 /* MocaaPhotoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

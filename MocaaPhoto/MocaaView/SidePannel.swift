@@ -15,7 +15,7 @@ struct SidePannel: View {
         let hostingView = NSHostingView(rootView: view)
 
         // 更新视图的大小和位置
-        hostingView.frame = CGRect(x: 0, y: 0, width: 300, height: 200) // 设置为实际视图的大小
+        hostingView.frame = CGRect(x: 0, y: 0, width: 2000, height: 1200) // 设置为实际视图的大小
         
         // 保证更新内容
         hostingView.layout()

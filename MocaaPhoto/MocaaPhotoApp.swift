@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
-
 
 @main
 struct MocaaPhotoApp: App {
@@ -19,24 +17,27 @@ struct MocaaPhotoApp: App {
     var body: some Scene {
         WindowGroup {
             HStack {
-                MocaaView()
-                    .environmentObject(viewModel)
-                    .environmentObject(imageStore)
-                SidePannel()
-                    .environmentObject(imageStore)
+                ContentView()
             }
+//            HStack {
+//                MocaaView()
+//                    .environmentObject(viewModel)
+//                    .environmentObject(imageStore)
+//                SidePannel()
+//                    .environmentObject(imageStore)
+//            }
             
         }
-        .commands {
-            CommandMenu("File") {
-                Button("Save") {
-                    // 这里调用你的保存逻辑
-//                    saveAction()
-                    viewModel.triggerSave()
-                }
-                .keyboardShortcut("s", modifiers: .command) // 添加快捷键 Command + S
-            }
-        }
+//        .commands {
+//            CommandMenu("File") {
+//                Button("Save") {
+//                    // 这里调用你的保存逻辑
+////                    saveAction()
+//                    viewModel.triggerSave()
+//                }
+//                .keyboardShortcut("s", modifiers: .command) // 添加快捷键 Command + S
+//            }
+//        }
     }
     
     func saveAction() {

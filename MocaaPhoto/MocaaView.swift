@@ -9,13 +9,15 @@ import SwiftUI
 import AppKit
 
 struct MocaaView: View {
-    @State private var image: NSImage?
+    @State private var ximage: NSImage?
     @State private var showingImagePicker = false
     @State private var outputImage: NSImage?
     @State private var backgroundImage: NSImage?
     @State private var windowSize: CGSize = .zero
     @State private var imagePadding: CGFloat = 180
     @EnvironmentObject var viewModel: AppViewModel
+    // 将imageStore设置为环境对象
+    @EnvironmentObject var imageStore: ImageStore
 
     func createOutputImage(image: NSImage) -> NSImage {
         let size = NSSize(width: 600, height: 400)
@@ -48,7 +50,7 @@ struct MocaaView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .center){
-                if image != nil {
+                if imageStore.currentImage != nil {
                     ZStack {
                         if let backgroundImage = backgroundImage {
 //                            Image(nsImage: backgroundImage)
@@ -66,7 +68,7 @@ struct MocaaView: View {
                                 
                         }
                         
-                        if let image = image {
+                        if let image = imageStore.currentImage {
                             let aspectRatio = image.size.width / image.size.height
                             let imageWidth = min(geometry.size.width - imagePadding, aspectRatio * (geometry.size.height - imagePadding ))
                             let imageHeight = min(geometry.size.height - imagePadding, (geometry.size.width - imagePadding) / aspectRatio)
@@ -95,7 +97,7 @@ struct MocaaView: View {
                     }
                     
                     Button("Export") {
-                        if let image = image {
+                        if let image = imageStore.currentImage {
                             let outputImage = createOutputImage(image: image)
                             saveImageToDisk(image: outputImage)
                         }
@@ -120,8 +122,8 @@ struct MocaaView: View {
             }
             .sheet(isPresented: $showingImagePicker) {
                 
-                ImagePicker(image: self.$image)
-                    .onChange(of: image) { _ in
+                ImagePicker(image: self.$imageStore.currentImage)
+                    .onChange(of: imageStore.currentImage) { _ in
                         showingImagePicker = false
                     }
                     .onSubmit {
@@ -130,7 +132,7 @@ struct MocaaView: View {
                     }
                     .onDisappear {
                         print("this is disappear")
-                        if let image = self.image {
+                        if let image = imageStore.currentImage {
                             self.backgroundImage = image.blurred(radius: 70)
                         }
                     }
@@ -144,16 +146,16 @@ struct MocaaView: View {
             }
         }
         .padding(0.0)
-        .onChange(of: viewModel.triggerSaveAction) { _ in
-            print("trigger save")
-            DispatchQueue.main.async {
-                if let image = image {
-                    let outputImage = createOutputImage(image: image)
-                    self.saveImageToDisk(image: outputImage)
-                }
-            }
-            
-        }
+//        .onChange(of: viewModel.triggerSaveAction) { _ in
+//            print("trigger save")
+//            DispatchQueue.main.async {
+//                if let image = imageStore.currentImage {
+//                    let outputImage = createOutputImage(image: image)
+//                    self.saveImageToDisk(image: outputImage)
+//                }
+//            }
+//            
+//        }
     }
     
 }

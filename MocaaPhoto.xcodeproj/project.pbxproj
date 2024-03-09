@@ -8,13 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		F20F73032B839FC200705E08 /* MocaaPhotoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F73022B839FC200705E08 /* MocaaPhotoApp.swift */; };
-		F20F73052B839FC200705E08 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F73042B839FC200705E08 /* ContentView.swift */; };
-		F20F73072B839FC200705E08 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F73062B839FC200705E08 /* Item.swift */; };
 		F20F73092B839FC400705E08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F20F73082B839FC400705E08 /* Assets.xcassets */; };
 		F20F730C2B839FC400705E08 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F20F730B2B839FC400705E08 /* Preview Assets.xcassets */; };
 		F20F73142B84EB7500705E08 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F73132B84EB7500705E08 /* File.swift */; };
-		F20F73162B84EBBB00705E08 /* MocaaAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F73152B84EBBB00705E08 /* MocaaAddView.swift */; };
 		F20F73182B84F3C000705E08 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F20F73172B84F3C000705E08 /* README.md */; };
+		F241A91D2B9C41DE00181611 /* SidePannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A91C2B9C41DE00181611 /* SidePannel.swift */; };
 		F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22062B9609E800D33EA5 /* MocaaView.swift */; };
 		F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22082B960C1B00D33EA5 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
@@ -22,14 +20,12 @@
 /* Begin PBXFileReference section */
 		F20F72FF2B839FC200705E08 /* MocaaPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MocaaPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F20F73022B839FC200705E08 /* MocaaPhotoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocaaPhotoApp.swift; sourceTree = "<group>"; };
-		F20F73042B839FC200705E08 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		F20F73062B839FC200705E08 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		F20F73082B839FC400705E08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F20F730B2B839FC400705E08 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F20F730D2B839FC400705E08 /* MocaaPhoto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MocaaPhoto.entitlements; sourceTree = "<group>"; };
 		F20F73132B84EB7500705E08 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
-		F20F73152B84EBBB00705E08 /* MocaaAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocaaAddView.swift; sourceTree = "<group>"; };
 		F20F73172B84F3C000705E08 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		F241A91C2B9C41DE00181611 /* SidePannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePannel.swift; sourceTree = "<group>"; };
 		F26C22062B9609E800D33EA5 /* MocaaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocaaView.swift; sourceTree = "<group>"; };
 		F26C22082B960C1B00D33EA5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -67,11 +63,9 @@
 			children = (
 				F20F73022B839FC200705E08 /* MocaaPhotoApp.swift */,
 				F26C22062B9609E800D33EA5 /* MocaaView.swift */,
+				F241A91C2B9C41DE00181611 /* SidePannel.swift */,
 				F26C22082B960C1B00D33EA5 /* ImagePicker.swift */,
-				F20F73042B839FC200705E08 /* ContentView.swift */,
 				F20F73132B84EB7500705E08 /* File.swift */,
-				F20F73152B84EBBB00705E08 /* MocaaAddView.swift */,
-				F20F73062B839FC200705E08 /* Item.swift */,
 				F20F73082B839FC400705E08 /* Assets.xcassets */,
 				F20F730D2B839FC400705E08 /* MocaaPhoto.entitlements */,
 				F20F730A2B839FC400705E08 /* Preview Content */,
@@ -158,12 +152,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F20F73052B839FC200705E08 /* ContentView.swift in Sources */,
 				F20F73142B84EB7500705E08 /* File.swift in Sources */,
-				F20F73162B84EBBB00705E08 /* MocaaAddView.swift in Sources */,
 				F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */,
-				F20F73072B839FC200705E08 /* Item.swift in Sources */,
 				F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */,
+				F241A91D2B9C41DE00181611 /* SidePannel.swift in Sources */,
 				F20F73032B839FC200705E08 /* MocaaPhotoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

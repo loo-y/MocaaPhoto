@@ -14,7 +14,7 @@ struct ContentView: View {
     @StateObject private var viewModel = ImageEditorViewModel()
     
     var body: some View {
-        HSplitView {
+        VSplitView {
             ImageView(viewModel: viewModel) // 显示和编辑图片
             FunctionView(viewModel: viewModel) // 功能按钮区
         }
@@ -44,11 +44,11 @@ class ImageEditorViewModel: ObservableObject {
     func createCombinedImage(from image: NSImage) {
         let aspectRatio: CGFloat = 16.0 / 9.0
         let originalSize = image.size
-        let newHeight = originalSize.height * 1.4 // 40% taller
+        let newHeight = originalSize.height * 1.3  // 40% taller
         let newWidth = newHeight * aspectRatio // width according to the 16:9 aspect ratio
-        
+        let cornerRadius = image.size.width > image.size.height ? image.size.width * 0.025 : image.size.height * 0.025
         // Resize original image
-        let resizedImage = createRoundedShadowImage(from: image, cornerRadius: 50, shadowColor: NSColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.7), shadowBlurRadius: 100, shadowOffset: CGSize(width: 0, height: 0))
+        let resizedImage = createRoundedShadowImage(from: image, cornerRadius: cornerRadius, shadowColor: NSColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.7), shadowBlurRadius: 100, shadowOffset: CGSize(width: 0, height: 0))
         let resizedSize = resizedImage.size
 //        let resizedImage = image
         
@@ -59,20 +59,53 @@ class ImageEditorViewModel: ObservableObject {
         guard let blurredBackground = image.blurred(radius: 200)?.cropped(to: NSSize(width: originalSize.width, height: originalSize.height)) else {
             return
         }
+
+        // ========== Method 1 ==========
+//        // Start drawing context
+//        let finalSize = NSSize(width: newWidth, height: newHeight)
+//        let finalImage = NSImage(size: finalSize)
+//
+//        finalImage.lockFocus()
+//
+//        // Draw the blurred background
+//        blurredBackground.draw(in: NSRect(x: 0, y: 0, width: newWidth, height: newHeight))
+//
+//        // Calculate resized image position
+//        let resizedPosition = CGPoint(x: (newWidth - resizedImage.size.width) / 2, y: (newHeight - resizedImage.size.height) / 2)
+//
+//        // Draw the resized image on top of the blurred background
+//        resizedImage.draw(at: resizedPosition, from: NSRect(origin: .zero, size: resizedImage.size), operation: .sourceOver, fraction: 1.0)
+//
+//        finalImage.unlockFocus()
+//        print("final image size: \(finalImage.size)")
+//
+//        combinedImage = finalImage
         
-        let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(newWidth), pixelsHigh: Int(newHeight), bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)
-        
+        // ========== Method 2 ==========
+        let rep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(newWidth),
+            pixelsHigh: Int(newHeight),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0
+        )
+
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep!)
-        
+
         // Draw the blurred image as background
         blurredBackground.draw(in: NSRect(x: 0, y: 0, width: newWidth, height: newHeight))
-        
+
         // Draw the original image in the center of the blurred background
         resizedImage.draw(in: NSRect(x: (newWidth - resizedSize.width) / 2, y: (newHeight - resizedSize.height) / 2, width: resizedSize.width, height: resizedSize.height), from: NSRect(x: 0, y: 0, width: resizedSize.width, height: resizedSize.height), operation: .sourceOver, fraction: 1.0)
-        
+
         NSGraphicsContext.restoreGraphicsState()
-        
+
         if let finalImage = rep?.representation(using: .png, properties: [:]) {
             combinedImage = NSImage(data: finalImage)
         }
@@ -83,32 +116,32 @@ class ImageEditorViewModel: ObservableObject {
 //        let newWidth = imageSize.width + shadowOffset.width + shadowBlurRadius * 2
 //        let newHeight = imageSize.height + abs(shadowOffset.height) + shadowBlurRadius * 2
 //        let newImageSize = CGSize(width: newWidth, height: newHeight)
-//        
+//
 //        let imageWithRoundedCorners = NSImage(size: imageSize)
-//        
+//
 //        imageWithRoundedCorners.lockFocus()
 //        let roundedPath = NSBezierPath(roundedRect: NSRect(origin: CGPoint.zero, size: imageSize), xRadius: cornerRadius, yRadius: cornerRadius)
 //        roundedPath.addClip()
 //        originalImage.draw(at: CGPoint.zero, from: NSRect(origin: CGPoint.zero, size: imageSize), operation: .copy, fraction: 1)
 //        imageWithRoundedCorners.unlockFocus()
-//        
+//
 //        let shadowedImage = NSImage(size: newImageSize)
-//        
+//
 //        shadowedImage.lockFocus()
 //        let context = NSGraphicsContext.current!.cgContext
 //        context.interpolationQuality = .high
 //        context.saveGState()
 //        context.beginTransparencyLayer(auxiliaryInfo: nil)
-//        
+//
 //        let drawingPoint = CGPoint(x: (newWidth - imageSize.width) / 2, y: (newHeight - imageSize.height) / 2)
-//        
+//
 //        context.setShadow(offset: shadowOffset, blur: shadowBlurRadius, color: shadowColor.cgColor)
 //        imageWithRoundedCorners.draw(at: drawingPoint, from: NSRect(origin: CGPoint.zero, size: imageSize), operation: .sourceOver, fraction: 1)
-//        
+//
 //        context.endTransparencyLayer()
 //        context.restoreGState()
 //        shadowedImage.unlockFocus()
-//        
+//
 //        return shadowedImage
 //    }
     
@@ -161,7 +194,7 @@ class ImageEditorViewModel: ObservableObject {
 //
 //        let clippingPath = NSBezierPath(roundedRect: newImageRect, xRadius: cornerRadius, yRadius: cornerRadius)
 //        clippingPath.addClip()
-//        
+//
 //        originalImage.draw(at: NSPoint(x: shadowBlurRadius / 2, y: shadowBlurRadius / 2), from: NSZeroRect, operation: .sourceOver, fraction: 1)
 //
 //        NSGraphicsContext.restoreGraphicsState()
@@ -176,15 +209,15 @@ class ImageEditorViewModel: ObservableObject {
 //        let newImageSize = NSSize(width: imageSize.width + shadowBlurRadius * 2, height: imageSize.height + shadowBlurRadius * 2)
 //
 //        let newImage = NSImage(size: newImageSize)
-//        
+//
 //        newImage.lockFocus()
 //        defer { newImage.unlockFocus() }
-//        
+//
 //        let imageRect = NSRect(origin: CGPoint(x: shadowBlurRadius, y: shadowBlurRadius), size: imageSize)
 //        let path = NSBezierPath(roundedRect: imageRect, xRadius: cornerRadius, yRadius: cornerRadius)
 //
 //        NSGraphicsContext.current?.shouldAntialias = true // Antialias edges
-//        
+//
 //        // Draw shadow
 //        let shadow = NSShadow()
 //        shadow.shadowOffset = shadowOffset
@@ -199,9 +232,9 @@ class ImageEditorViewModel: ObservableObject {
 //        NSGraphicsContext.current?.compositingOperation = .copy
 //        let clipPath = NSBezierPath(roundedRect: imageRect, xRadius: cornerRadius, yRadius: cornerRadius)
 //        clipPath.fill()
-//        
+//
 //        NSGraphicsContext.current?.compositingOperation = .sourceOver // Reset the compositing operation
-//        
+//
 //        return newImage
 //    }
     
@@ -242,15 +275,44 @@ class ImageEditorViewModel: ObservableObject {
     func saveCombinedImage() {
         // 将图像保存到文件系统
         if let saveImage = combinedImage {
-            guard let imageData = saveImage.tiffRepresentation,
-                  let fileURL = getSaveURL() else { return }
+//            guard let imageData = saveImage.tiffRepresentation,
+//                  let fileURL = getSaveURL() else { return }
             
-            do {
-                try imageData.write(to: fileURL)
-                print("Image saved to \(fileURL.path)")
-            } catch {
-                print("Error saving image: \(error)")
+            // 假定 image 是你要设定 DPI 的 NSImage 实例
+            guard let imageData = saveImage.tiffRepresentation else {
+                print("Failed to get TIFF representation of the image")
+                return
             }
+
+            guard let imageRep = NSBitmapImageRep(data: imageData) else {
+                print("Failed to create image representation")
+                return
+            }
+            
+            // 设定目标 DPI 值
+            let targetDPI: CGFloat = 72.0 // 或你所需的任何 DPI 值
+            let pixelsWide = imageRep.pixelsWide
+            let pixelsHigh = imageRep.pixelsHigh
+            
+            // 通过改变 size 属性来设定实际 DPI，而不改变像素维度
+            imageRep.size = NSSize(width: CGFloat(pixelsWide) / targetDPI,
+                                   height: CGFloat(pixelsHigh) / targetDPI)
+            
+            guard let fileURL = getSaveURL() else { return }
+
+            // properties: [.compressionFactor: 0.9]
+            // properties: [:]
+            if let dataWithDPI = imageRep.representation(using: .jpeg, properties: [.compressionFactor: 1]) {
+                try? dataWithDPI.write(to: fileURL)
+                print("Image saved with \(targetDPI) DPI")
+            }
+            
+//            do {
+//                try imageData.write(to: fileURL)
+//                print("Image saved to \(fileURL.path)")
+//            } catch {
+//                print("Error saving image: \(error)")
+//            }
         }
         
     }
@@ -259,7 +321,7 @@ class ImageEditorViewModel: ObservableObject {
         let view: ImageView = .init(viewModel: self)
         // 使用 snapshot 方法捕获图像
         guard let image = view.snapshot(size: snapshotSize) else { return }
-                
+        
         // 将图像保存到文件系统
         guard let imageData = image.tiffRepresentation,
               let fileURL = getSaveURL() else { return }
@@ -276,7 +338,7 @@ class ImageEditorViewModel: ObservableObject {
     private func getSaveURL() -> URL? {
         // 实现方式可能取决于是否需要用户选择位置还是默认一个位置，以下是示例:
         let panel = NSSavePanel()
-        panel.allowedFileTypes = ["png"]
+        panel.allowedFileTypes = ["jpg", "png"]
         panel.canCreateDirectories = true
         panel.isExtensionHidden = false
         panel.title = "Save your image"

@@ -39,8 +39,9 @@ struct FunctionView: View {
                 viewModel.saveCombinedImage()
             }
         }
-        .frame(width: 300)
-        .frame(maxHeight: .infinity)
-        .background(Color.gray)
+        .frame(maxWidth: .infinity)
+        .frame(height: 200)
+//        .background(Color.gray)
+        .background(Color(red: 232, green: 232, blue: 232))
     }
 }

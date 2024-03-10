@@ -10,6 +10,7 @@ import Combine
 import AppKit
 import Cocoa
 import ImageIO
+import CoreImage
 
 struct ContentView: View {
     @StateObject private var viewModel = ImageEditorViewModel()
@@ -54,6 +55,78 @@ class ImageEditorViewModel: ObservableObject {
         snapshotSize = size
     }
 
+    func applyFujiFilmStyle(to inputImage: NSImage) -> NSImage {
+        // 确保有CGImage来进行处理
+        let fixedImage = inputImage
+        guard let cgImage = fixedImage.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+            return inputImage
+        }
+
+        let ciImage = CIImage(cgImage: cgImage)
+        
+        // 创建并组合多个滤镜
+        guard let colorfulControlsFilter = CIFilter(name: "CIColorControls"),
+              let photoEffectFilter = CIFilter(name: "CIPhotoEffectInstant"),
+              let colorMatrixFilter = CIFilter(name: "CIColorMatrix") else {
+            return inputImage
+        }
+
+        // 调整亮度、对比度和饱和度
+        colorfulControlsFilter.setValue(ciImage, forKey: kCIInputImageKey)
+        colorfulControlsFilter.setValue(0.1, forKey: kCIInputBrightnessKey)
+        colorfulControlsFilter.setValue(1.2, forKey: kCIInputContrastKey) // 提高对比度以模仿胶片效果
+        colorfulControlsFilter.setValue(1.1, forKey: kCIInputSaturationKey)
+        
+        // 应用照片效果滤镜来模拟即时相片风格
+        if let outputImage = colorfulControlsFilter.outputImage {
+            photoEffectFilter.setValue(outputImage, forKey: kCIInputImageKey)
+        }
+        
+        // 使用颜色矩阵滤镜可以微调颜色（例如，增加特定通道的强度）
+        // colorMatrixFilter可以用来调整指定颜色分量，这里只是一个基础的示例
+//        if let outputImage = photoEffectFilter.outputImage {
+//            colorMatrixFilter.setValue(outputImage, forKey: kCIInputImageKey)
+//            colorMatrixFilter.setValue(CIVector(x: 1, y: 0, z: 0, w: 0), forKey: "inputRVector") // 修改红色分量
+//            colorMatrixFilter.setValue(CIVector(x: 0, y: 1, z: 0, w: 0), forKey: "inputGVector") // 修改绿色分量
+//            colorMatrixFilter.setValue(CIVector(x: 0, y: 0, z: 1, w: 0), forKey: "inputBVector") // 修改蓝色分量
+//            colorMatrixFilter.setValue(CIVector(x: 0, y: 0, z: 0, w: 1), forKey: "inputAVector") // 透明度分量保持不变
+//        }
+        
+        // 获取最终调整过的图像
+        if let outputImage = photoEffectFilter.outputImage {
+            let context = CIContext(options: nil)
+            if let outputCGImage = context.createCGImage(outputImage, from: outputImage.extent) {
+                return NSImage(cgImage: outputCGImage, size: fixedImage.size)
+            }
+        }
+        return inputImage
+        
+//        // ========== 自带滤镜的调整方法 start ==========
+//        // CIFalseColor： 将图像映射到一个由两种颜色组成的颜色空间。它将色阶替换为提供的两种颜色，创造出类似热成像或伪色效果。
+//        let falseColorFilter = CIFilter(name: "CIFalseColor")
+//        falseColorFilter?.setValue(combinedImage, forKey: kCIInputImageKey)
+//        falseColorFilter?.setValue(CIColor.red, forKey: "inputColor0")
+//        falseColorFilter?.setValue(CIColor.blue, forKey: "inputColor1")
+//        
+//        // CIHueAdjust： 用于调整图像色调的值。给定一个角度值来旋转色相
+//        let hueAdjustFilter = CIFilter(name: "CIHueAdjust")
+//        hueAdjustFilter?.setValue(combinedImage, forKey: kCIInputImageKey)
+//        hueAdjustFilter?.setValue(1.57, forKey: "inputAngle") // 旋转色相约 90 度
+//        
+//        // CIColorControls： 用于调整图像的饱和度、亮度和对比度。
+//        let colorControlsFilter = CIFilter(name: "CIColorControls")
+//        colorControlsFilter?.setValue(combinedImage, forKey: kCIInputImageKey)
+//        colorControlsFilter?.setValue(1.2, forKey: "inputSaturation") // 增强饱和度
+//        colorControlsFilter?.setValue(0.5, forKey: "inputBrightness") // 增加亮度
+//        colorControlsFilter?.setValue(1.5, forKey: "inputContrast") // 增加对比度
+//        
+//        // CIRandomGenerator： 生成一张包含随机像素的图像。这个滤镜通常用于创建纹理或者作为其他特效的输入。
+//        let randomGenerator = CIFilter(name: "CIRandomGenerator")
+//        let randomImage = randomGenerator?.outputImage
+//        
+//        // ========== 自带滤镜的调整方法 end ==========
+    }
+    
     func getExifData(from url: URL?) -> NSDictionary? {
         guard let imageUrl = url else {return nil}
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil),
@@ -143,7 +216,7 @@ class ImageEditorViewModel: ObservableObject {
         
 
         
-        let aspectRatio: CGFloat = 16.0 / 9.0   // 3.0 / 2.0 // 
+        let aspectRatio: CGFloat = 16.0 / 9.0   // 3.0 / 2.0 //
         let originalSize = image.size
         let newHeight = originalSize.height * 1.3  // 40% taller
         let newWidth = newHeight * aspectRatio // width according to the 16:9 aspect ratio

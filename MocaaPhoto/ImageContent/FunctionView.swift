@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FunctionView: View {
+    @State private var inputImage: NSImage?
     @ObservedObject var viewModel: ImageEditorViewModel
 //    let imageView: ImageView // 传入ImageView实例
     
@@ -28,6 +29,7 @@ struct FunctionView: View {
                     if let image = NSImage(contentsOf: url) {
                         viewModel.originalImagePath = url
                         viewModel.originalImage = image
+                        inputImage = image
                         viewModel.createCombinedImage(from: image)
 //                        viewModel.modifiedImage = createNewImage(from: image)
                     }
@@ -38,6 +40,12 @@ struct FunctionView: View {
             Button("Save Image") {
                 // 调用viewModel中的saveImage函数，传入imageView
                 viewModel.saveCombinedImage()
+            }
+            Button("Fujifilm Style"){
+                guard let image = inputImage else { return }
+                let fujiFilmImage = viewModel.applyFujiFilmStyle(to: image)
+                viewModel.originalImage = fujiFilmImage
+                viewModel.createCombinedImage(from: fujiFilmImage)
             }
         }
         .frame(maxWidth: .infinity)

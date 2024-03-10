@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 import AppKit
 import Cocoa
+import ImageIO
 
 struct ContentView: View {
     @StateObject private var viewModel = ImageEditorViewModel()
@@ -26,11 +27,24 @@ struct ContentView: View {
     ContentView()
 }
 
+// 定义一个结构体来存储你想要的相机信息
+struct CameraInfo {
+    var lensMake: String = ""
+    var lensModel: String = ""
+    var focalLength: String = ""
+    var aperture: String = ""
+    var shutterSpeed: String = ""
+    var iso: String = ""
+    var dateTimeOriginal: String = ""
+}
+
 class ImageEditorViewModel: ObservableObject {
     @Published var showImagePicker: Bool = false
+    @Published var originalImagePath: URL? = nil
     @Published var originalImage: NSImage? = nil // 用于管理图片
     @Published var modifiedImage: NSImage? = nil
     @Published var combinedImage: NSImage? = nil
+    
     @Published var text: String = "" // 用于管理文本
     // ... 其他跟编辑相关的状态
 
@@ -39,16 +53,103 @@ class ImageEditorViewModel: ObservableObject {
     func updateSnapshotSize(_ size: CGSize) {
         snapshotSize = size
     }
+
+    func getExifData(from url: URL?) -> NSDictionary? {
+        guard let imageUrl = url else {return nil}
+        if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil),
+           let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? NSDictionary,
+           let exifDict = imageProperties[kCGImagePropertyExifDictionary as NSString] as? NSDictionary {
+//            print(exifDict)
+            if let fNumber = exifDict[kCGImagePropertyExifFNumber as String] as? NSNumber {
+                // 将光圈值FNumber转换为字符串形式
+                let fNumberString = String(format: "F%.1f", fNumber.floatValue)
+                print("FNumber (Aperture): \(fNumberString)")
+
+            }
+            return exifDict
+        }
+        
+        return nil
+    }
     
+    func getCameraInfo(from url: URL?) -> CameraInfo {
+        guard let imageUrl = url else { return CameraInfo() }
+        guard let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil),
+              let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as NSDictionary?,
+              let exifDict = imageProperties[kCGImagePropertyExifDictionary as NSString] as? NSDictionary,
+              let tiffDict = imageProperties[kCGImagePropertyTIFFDictionary as NSString] as? NSDictionary else {
+            return CameraInfo()
+        }
+        
+        // 初始化CameraInfo结构体
+        var cameraInfo = CameraInfo()
+        
+        print("====exifDict====", exifDict)
+        print("====tiffDict====", tiffDict)
+        // 提取并转换所需的信息为字符串
+//        cameraInfo.lensMake = exifDict[kCGImagePropertyExifLensMake as String] as? String ?? ""
+//        cameraInfo.lensModel = exifDict[kCGImagePropertyExifLensModel as String] as? String ?? ""
+//        cameraInfo.lensMake = tiffDict[kCGImagePropertyTIFFMake as String] as? String ?? ""
+//        cameraInfo.lensModel = tiffDict[kCGImagePropertyTIFFModel as String] as? String ?? ""
+        
+        if let lensMake = tiffDict[kCGImagePropertyTIFFMake as String] as? String {
+            cameraInfo.lensMake = lensMake.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        if let lensModel = tiffDict[kCGImagePropertyTIFFModel as String] as? String {
+            cameraInfo.lensModel = lensModel.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        
+//        if let focalLengthNumber = exifDict[kCGImagePropertyExifFocalLength as String] as? NSNumber {
+//            cameraInfo.focalLength = "\(focalLengthNumber.stringValue) mm"
+//        }
+        
+        if let focalLengthNumber = exifDict[kCGImagePropertyExifFocalLength as String] as? NSNumber {
+            if focalLengthNumber.floatValue > 0 {
+                // 如果焦距大于0，保存焦距值，单位是毫米
+                cameraInfo.focalLength = "\(focalLengthNumber.stringValue) mm"
+            } else {
+                // 如果焦距为0，将其作为空字符串处理
+                cameraInfo.focalLength = ""
+            }
+        }
+        if let apertureNumber = exifDict[kCGImagePropertyExifFNumber as String] as? NSNumber {
+            cameraInfo.aperture = "F/\(apertureNumber.stringValue)"
+        }
+        if let shutterSpeedValue = exifDict[kCGImagePropertyExifExposureTime as String] as? Double {
+            
+           
+            
+            if shutterSpeedValue >= 1 {
+                cameraInfo.shutterSpeed = "\(Int(shutterSpeedValue))s"
+            } else {
+                let denominator = lround(1 / shutterSpeedValue)
+                cameraInfo.shutterSpeed = "1/\(denominator)s"
+            }
+//            let shutterSpeedValue = shutterSpeedNumber.floatValue
+//            cameraInfo.shutterSpeed = shutterSpeedValue > 1 ? "\(shutterSpeedNumber.stringValue)s" : "1/\(1/shutterSpeedValue)s"
+        }
+        if let isoArray = exifDict[kCGImagePropertyExifISOSpeedRatings as String] as? [NSNumber], let isoValue = isoArray.first {
+            cameraInfo.iso = "ISO \(isoValue.stringValue)"
+        }
+        cameraInfo.dateTimeOriginal = exifDict[kCGImagePropertyExifDateTimeOriginal as String] as? String ?? ""
+        
+        return cameraInfo
+    }
     
     func createCombinedImage(from image: NSImage) {
-        let aspectRatio: CGFloat = 16.0 / 9.0
+        let cameraInfo = getCameraInfo(from: originalImagePath)
+        print("EXIF", cameraInfo)
+        
+
+        
+        let aspectRatio: CGFloat = 16.0 / 9.0   // 3.0 / 2.0 // 
         let originalSize = image.size
         let newHeight = originalSize.height * 1.3  // 40% taller
         let newWidth = newHeight * aspectRatio // width according to the 16:9 aspect ratio
         let cornerRadius = image.size.width > image.size.height ? image.size.width * 0.025 : image.size.height * 0.025
         // Resize original image
-        let resizedImage = createRoundedShadowImage(from: image, cornerRadius: cornerRadius, shadowColor: NSColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.7), shadowBlurRadius: 100, shadowOffset: CGSize(width: 0, height: 0))
+        let resizedImage = createRoundedShadowImage(from: image, cornerRadius: cornerRadius, shadowColor: NSColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.9), shadowBlurRadius: 100, shadowOffset: CGSize(width: 0, height: 0))
         let resizedSize = resizedImage.size
 //        let resizedImage = image
         
@@ -60,6 +161,31 @@ class ImageEditorViewModel: ObservableObject {
             return
         }
 
+        // 向图片的下方添加cameraInfo信息
+        let infoTextAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: NSColor.white,
+            .font: NSFont.systemFont(ofSize: originalSize.height * 0.03, weight: .regular),
+            .obliqueness: 0.1 // 这里可以调整数值来增加或减少斜体的倾斜度
+        ]
+
+        let lensInfoTextAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: NSColor.white,
+            .font: NSFont.systemFont(ofSize: originalSize.height * 0.04, weight: .bold)
+        ]
+
+        let lensMakeString = NSAttributedString(string: cameraInfo.lensModel, attributes: lensInfoTextAttributes)
+        let infoString = NSAttributedString(string: "\(cameraInfo.shutterSpeed)  \(cameraInfo.iso)  \(cameraInfo.aperture)  \(cameraInfo.focalLength)", attributes: infoTextAttributes)
+
+        let textHeight = lensMakeString.size().height + infoString.size().height
+        let imageWidth = resizedImage.size.width
+        let imageHeight = resizedImage.size.height
+        // 调整原图上移位置，为文字信息留出空间
+        let imageOffset = originalSize.height * 0.05 // 10 points for padding
+
+        // 重新计算finalImage的高度来容纳文字信息
+        let finalHeightWithText = newHeight + imageOffset
+
+        
         // ========== Method 1 ==========
 //        // Start drawing context
 //        let finalSize = NSSize(width: newWidth, height: newHeight)
@@ -102,8 +228,19 @@ class ImageEditorViewModel: ObservableObject {
         blurredBackground.draw(in: NSRect(x: 0, y: 0, width: newWidth, height: newHeight))
 
         // Draw the original image in the center of the blurred background
-        resizedImage.draw(in: NSRect(x: (newWidth - resizedSize.width) / 2, y: (newHeight - resizedSize.height) / 2, width: resizedSize.width, height: resizedSize.height), from: NSRect(x: 0, y: 0, width: resizedSize.width, height: resizedSize.height), operation: .sourceOver, fraction: 1.0)
+//        resizedImage.draw(in: NSRect(x: (newWidth - resizedSize.width) / 2, y: (newHeight - resizedSize.height) / 2, width: resizedSize.width, height: resizedSize.height), from: NSRect(x: 0, y: 0, width: resizedSize.width, height: resizedSize.height), operation: .sourceOver, fraction: 1.0)
+        
+        // Draw the original image in the center of the blurred background, adjusted upwards for text
+        resizedImage.draw(in: NSRect(x: (newWidth - imageWidth) / 2, y: (newHeight - imageHeight) / 2 + imageOffset, width: imageWidth, height: imageHeight), from: NSRect(x: 0, y: 0, width: imageWidth, height: imageHeight), operation: .sourceOver, fraction: 1.0)
 
+        // Draw the rest of the camera info string
+        infoString.draw(at: CGPoint(x: (newWidth - infoString.size().width) / 2, y: originalSize.height * 0.05))
+        
+        print("lensMakeString: \(lensMakeString)")
+        lensMakeString.draw(at: CGPoint(x: (newWidth - lensMakeString.size().width) / 2, y: originalSize.height * 0.06 + infoString.size().height))
+
+
+        
         NSGraphicsContext.restoreGraphicsState()
 
         if let finalImage = rep?.representation(using: .png, properties: [:]) {

@@ -22,10 +22,11 @@ struct FunctionView: View {
                 panel.allowsMultipleSelection = false
                 panel.canChooseDirectories = false
                 panel.canChooseFiles = true
-                panel.allowedFileTypes = ["png", "jpg", "jpeg"]
+                panel.allowedFileTypes = ["png", "jpg", "jpeg", "heic"]
                 
                 if panel.runModal() == .OK, let url = panel.url {
                     if let image = NSImage(contentsOf: url) {
+                        viewModel.originalImagePath = url
                         viewModel.originalImage = image
                         viewModel.createCombinedImage(from: image)
 //                        viewModel.modifiedImage = createNewImage(from: image)

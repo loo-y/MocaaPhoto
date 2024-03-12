@@ -1,20 +1,18 @@
 //
-//  FunctionView.swift
+//  WelcomeView.swift
 //  MocaaPhoto
 //
-//  Created by Loo on 2024/3/9.
+//  Created by Loo on 2024/3/12.
 //
 
 import SwiftUI
 
-struct FunctionView: View {
-    @State private var inputImage: NSImage?
+struct WelcomeView: View {
     @ObservedObject var viewModel: ImageEditorViewModel
-//    let imageView: ImageView // 传入ImageView实例
-    
     var body: some View {
-        VStack(alignment: .center, spacing: 30) {
-            MButton(text: "New Image", action: {
+        VStack(spacing: 20){
+            MButton(text: "Add Image", action: {
+                // Handle the button tap
                 viewModel.showImagePicker = true
                 
                 print("click in button load image")
@@ -29,32 +27,22 @@ struct FunctionView: View {
                     if let image = NSImage(contentsOf: url) {
                         viewModel.originalImagePath = url
                         viewModel.originalImage = image
-                        inputImage = image
                         viewModel.createCombinedImage(from: image)
 //                        viewModel.modifiedImage = createNewImage(from: image)
                     }
                 }
             }, color: .blue)
-
-            MButton(text: "Save Image", action: {
-                viewModel.saveCombinedImage()
-            }, color: .green)
             
-            MButton(text: "Fujifilm Style", action: {
-                guard let image = inputImage else { return }
-                let fujiFilmImage = viewModel.applyFujiFilmStyle(to: image)
-                viewModel.originalImage = fujiFilmImage
-                viewModel.createCombinedImage(from: fujiFilmImage)
-            }, color: .black)
-
+            // Text under the button
+            Text("or drop an image")
+                .foregroundColor(.gray)
         }
-        .frame(maxHeight: .infinity)
-        .frame(width: 300)
-//        .background(Color.gray)
-        .background(Color(red: 232, green: 232, blue: 232))
+        .frame(width: 300, height: 250) // View size as requested
+        .background(Color.white) // White canvas
+
     }
 }
 
 #Preview {
-    FunctionView(viewModel: ImageEditorViewModel())
+    WelcomeView(viewModel: ImageEditorViewModel())
 }

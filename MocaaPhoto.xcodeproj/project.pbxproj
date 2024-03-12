@@ -16,6 +16,8 @@
 		F241A91F2B9C80D900181611 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A91E2B9C80D900181611 /* ContentView.swift */; };
 		F241A9212B9C814400181611 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9202B9C814400181611 /* ImageView.swift */; };
 		F241A9232B9C815300181611 /* FunctionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9222B9C815300181611 /* FunctionView.swift */; };
+		F241A9272BA0893A00181611 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9262BA0893A00181611 /* WelcomeView.swift */; };
+		F241A92A2BA0A29A00181611 /* MButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9292BA0A29A00181611 /* MButton.swift */; };
 		F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22062B9609E800D33EA5 /* MocaaView.swift */; };
 		F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22082B960C1B00D33EA5 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
@@ -32,6 +34,8 @@
 		F241A91E2B9C80D900181611 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F241A9202B9C814400181611 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		F241A9222B9C815300181611 /* FunctionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionView.swift; sourceTree = "<group>"; };
+		F241A9262BA0893A00181611 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		F241A9292BA0A29A00181611 /* MButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MButton.swift; sourceTree = "<group>"; };
 		F26C22062B9609E800D33EA5 /* MocaaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocaaView.swift; sourceTree = "<group>"; };
 		F26C22082B960C1B00D33EA5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -67,6 +71,7 @@
 		F20F73012B839FC200705E08 /* MocaaPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				F241A9282BA0A28500181611 /* Components */,
 				F241A9252B9C8CF000181611 /* MocaaView */,
 				F241A9242B9C8AA500181611 /* ImageContent */,
 				F20F73022B839FC200705E08 /* MocaaPhotoApp.swift */,
@@ -91,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				F241A91E2B9C80D900181611 /* ContentView.swift */,
+				F241A9262BA0893A00181611 /* WelcomeView.swift */,
 				F241A9202B9C814400181611 /* ImageView.swift */,
 				F241A9222B9C815300181611 /* FunctionView.swift */,
 			);
@@ -104,6 +110,14 @@
 				F241A91C2B9C41DE00181611 /* SidePannel.swift */,
 			);
 			path = MocaaView;
+			sourceTree = "<group>";
+		};
+		F241A9282BA0A28500181611 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F241A9292BA0A29A00181611 /* MButton.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,8 +195,10 @@
 				F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */,
 				F241A91F2B9C80D900181611 /* ContentView.swift in Sources */,
 				F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */,
+				F241A9272BA0893A00181611 /* WelcomeView.swift in Sources */,
 				F241A91D2B9C41DE00181611 /* SidePannel.swift in Sources */,
 				F241A9212B9C814400181611 /* ImageView.swift in Sources */,
+				F241A92A2BA0A29A00181611 /* MButton.swift in Sources */,
 				F241A9232B9C815300181611 /* FunctionView.swift in Sources */,
 				F20F73032B839FC200705E08 /* MocaaPhotoApp.swift in Sources */,
 			);

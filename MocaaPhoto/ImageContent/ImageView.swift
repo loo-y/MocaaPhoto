@@ -31,12 +31,10 @@ struct ImageView: View {
                 print("(geometry.size.width / 16 * 9): \((geometry.size.width / 16 * 9))")
                 print("geometry.size.height : \(geometry.size.height)")
             }
-
             .onChange(of: geometry.size) { _ in
                 self.windowSize = geometry.size
             }
             .frame(width: geometry.size.width)
-//            .frame(height: (geometry.size.width / 16 * 9))
             .frame(height: geometry.size.height)
             .background(Color.black)
         }

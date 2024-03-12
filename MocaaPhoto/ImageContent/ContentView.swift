@@ -16,12 +16,42 @@ struct ContentView: View {
     @StateObject private var viewModel = ImageEditorViewModel()
     
     var body: some View {
-        VSplitView {
-            ImageView(viewModel: viewModel) // 显示和编辑图片
-            FunctionView(viewModel: viewModel) // 功能按钮区
+        if viewModel.originalImage == nil {
+                WelcomeView(viewModel: viewModel)
+                .configureWindow(color: NSColor.white, width: 300, height: 300)
+//                .onAppear(){
+//                    
+//                    // Access the window through NSApplication.shared
+//                    if let window = NSApplication.shared.windows.first {
+//                        window.setContentSize(NSSize(width: 300, height: 250))
+//                        // Optional: center the window
+//                        window.center()
+//                        print("window size: \(window.frame.size)", window)
+//                    }
+//                }
+        } else {
+            HSplitView {
+                ImageView(viewModel: viewModel) // 显示和编辑图片
+                FunctionView(viewModel: viewModel) // 功能按钮区
+                    
+            }
+            .background(Color.white)
+//            ImageView(viewModel: viewModel)
+            .configureWindow(color: NSColor.white, width: 1200, height: 900)
+//            .onAppear(){
+//                // Access the window through NSApplication.shared
+//                if let window = NSApplication.shared.windows.first,
+//                   let contentView = window.contentView?.superview {
+//                    window.setContentSize(NSSize(width: 800, height: 600))
+//                    // Optional: center the window
+//                    window.center()
+//                    print("window size: \(window.frame.size)", window)
+//                }
+//            }
+            
         }
-        .background(Color.black)
     }
+        
 }
 
 #Preview {
@@ -107,23 +137,23 @@ class ImageEditorViewModel: ObservableObject {
 //        falseColorFilter?.setValue(combinedImage, forKey: kCIInputImageKey)
 //        falseColorFilter?.setValue(CIColor.red, forKey: "inputColor0")
 //        falseColorFilter?.setValue(CIColor.blue, forKey: "inputColor1")
-//        
+//
 //        // CIHueAdjust： 用于调整图像色调的值。给定一个角度值来旋转色相
 //        let hueAdjustFilter = CIFilter(name: "CIHueAdjust")
 //        hueAdjustFilter?.setValue(combinedImage, forKey: kCIInputImageKey)
 //        hueAdjustFilter?.setValue(1.57, forKey: "inputAngle") // 旋转色相约 90 度
-//        
+//
 //        // CIColorControls： 用于调整图像的饱和度、亮度和对比度。
 //        let colorControlsFilter = CIFilter(name: "CIColorControls")
 //        colorControlsFilter?.setValue(combinedImage, forKey: kCIInputImageKey)
 //        colorControlsFilter?.setValue(1.2, forKey: "inputSaturation") // 增强饱和度
 //        colorControlsFilter?.setValue(0.5, forKey: "inputBrightness") // 增加亮度
 //        colorControlsFilter?.setValue(1.5, forKey: "inputContrast") // 增加对比度
-//        
+//
 //        // CIRandomGenerator： 生成一张包含随机像素的图像。这个滤镜通常用于创建纹理或者作为其他特效的输入。
 //        let randomGenerator = CIFilter(name: "CIRandomGenerator")
 //        let randomImage = randomGenerator?.outputImage
-//        
+//
 //        // ========== 自带滤镜的调整方法 end ==========
     }
     
@@ -560,31 +590,7 @@ class ImageEditorViewModel: ObservableObject {
     }
 }
 
-extension View {
-    func snapshot(size: CGSize) -> NSImage? {
-        // 创建NSHostingView 的实例来包含SwiftUI的View
-        let hostingView = NSHostingView(rootView: self)
-        // 指定视图大小
-        hostingView.frame = CGRect(origin: .zero, size: size)
-        
-        // 创建基于位图的图形上下文
-        guard let bitmapRep = hostingView.bitmapImageRepForCachingDisplay(in: hostingView.bounds) else { return nil }
-        hostingView.cacheDisplay(in: hostingView.bounds, to: bitmapRep)
-        
-        // 生成图像
-        let image = NSImage(size: bitmapRep.size)
-        image.addRepresentation(bitmapRep)
-        
-        return image
-    }
-    
-    // Internal method to calculate view size, this can be implemented differently
-    // depending on how you wish to calculate or retrieve the size of your SwiftUI View
-    private var size: CGSize {
-        // Dummy view size, replace with your actual view dimensions
-        return CGSize(width: 300, height: 300)
-    }
-}
+
 
 extension NSImage {
     func resizeImage(to newSize: NSSize) -> NSImage {

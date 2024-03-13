@@ -27,10 +27,16 @@ struct FunctionView: View {
                 
                 if panel.runModal() == .OK, let url = panel.url {
                     if let image = NSImage(contentsOf: url) {
+                        viewModel.combinedImage = nil
                         viewModel.originalImagePath = url
                         viewModel.originalImage = image
                         inputImage = image
-                        viewModel.createCombinedImage(from: image)
+                        viewModel.isLoading = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            viewModel.createCombinedImage(from: image)
+                            viewModel.isLoading = false
+                        }
+                        
 //                        viewModel.modifiedImage = createNewImage(from: image)
                     }
                 }

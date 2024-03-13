@@ -21,10 +21,19 @@ struct ImageView: View {
                         .resizable()
                         .scaledToFit()
                         .aspectRatio(contentMode: .fit)
+                }else if let originalImage = viewModel.originalImage {
+                    
+                    Image(nsImage: originalImage)
+                        .resizable()
+                        .scaledToFit()
+                        .aspectRatio(contentMode: .fit);
                 }
+                
                 Spacer() // 竖直填充
             }
             .onAppear {
+                
+               
                 // 当出现时，用实际的大小更新模型
                 self.viewModel.updateSnapshotSize(geometry.size)
                 print("geometry size: \(geometry.size)")

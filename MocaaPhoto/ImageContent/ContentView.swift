@@ -16,6 +16,8 @@ struct ContentView: View {
     @StateObject private var viewModel = ImageEditorViewModel()
     
     var body: some View {
+        // Conditionally display the loading overlay
+        
         if viewModel.originalImage == nil {
                 WelcomeView(viewModel: viewModel)
                 .configureWindow(color: NSColor.white, width: 300, height: 300)
@@ -30,24 +32,20 @@ struct ContentView: View {
 //                    }
 //                }
         } else {
-            HSplitView {
-                ImageView(viewModel: viewModel) // 显示和编辑图片
-                FunctionView(viewModel: viewModel) // 功能按钮区
-                    
+            ZStack{
+                HSplitView {
+                    ImageView(viewModel: viewModel) // 显示和编辑图片
+                    FunctionView(viewModel: viewModel) // 功能按钮区
+                        
+                }
+                .background(Color.white)
+    //            ImageView(viewModel: viewModel)
+                .configureWindow(color: NSColor.white, width: 1200, height: 900)
+                
+                viewModel.isLoading ? LoadingOverlay() : nil
             }
-            .background(Color.white)
-//            ImageView(viewModel: viewModel)
-            .configureWindow(color: NSColor.white, width: 1200, height: 900)
-//            .onAppear(){
-//                // Access the window through NSApplication.shared
-//                if let window = NSApplication.shared.windows.first,
-//                   let contentView = window.contentView?.superview {
-//                    window.setContentSize(NSSize(width: 800, height: 600))
-//                    // Optional: center the window
-//                    window.center()
-//                    print("window size: \(window.frame.size)", window)
-//                }
-//            }
+            
+
             
         }
     }
@@ -75,6 +73,7 @@ class ImageEditorViewModel: ObservableObject {
     @Published var originalImage: NSImage? = nil // 用于管理图片
     @Published var modifiedImage: NSImage? = nil
     @Published var combinedImage: NSImage? = nil
+    @Published var isLoading: Bool = false
     
     @Published var text: String = "" // 用于管理文本
     // ... 其他跟编辑相关的状态

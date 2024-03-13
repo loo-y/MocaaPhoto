@@ -27,7 +27,12 @@ struct WelcomeView: View {
                     if let image = NSImage(contentsOf: url) {
                         viewModel.originalImagePath = url
                         viewModel.originalImage = image
-                        viewModel.createCombinedImage(from: image)
+                        viewModel.isLoading = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // 2秒后延时
+                            viewModel.createCombinedImage(from: image)
+                            viewModel.isLoading = false
+                        }
+//
 //                        viewModel.modifiedImage = createNewImage(from: image)
                     }
                 }

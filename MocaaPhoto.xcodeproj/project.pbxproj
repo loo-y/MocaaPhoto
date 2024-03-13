@@ -18,6 +18,7 @@
 		F241A9232B9C815300181611 /* FunctionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9222B9C815300181611 /* FunctionView.swift */; };
 		F241A9272BA0893A00181611 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9262BA0893A00181611 /* WelcomeView.swift */; };
 		F241A92A2BA0A29A00181611 /* MButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A9292BA0A29A00181611 /* MButton.swift */; };
+		F241A92D2BA1E01C00181611 /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F241A92C2BA1E01C00181611 /* LoadingOverlay.swift */; };
 		F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22062B9609E800D33EA5 /* MocaaView.swift */; };
 		F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26C22082B960C1B00D33EA5 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		F241A9222B9C815300181611 /* FunctionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionView.swift; sourceTree = "<group>"; };
 		F241A9262BA0893A00181611 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		F241A9292BA0A29A00181611 /* MButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MButton.swift; sourceTree = "<group>"; };
+		F241A92C2BA1E01C00181611 /* LoadingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlay.swift; sourceTree = "<group>"; };
 		F26C22062B9609E800D33EA5 /* MocaaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocaaView.swift; sourceTree = "<group>"; };
 		F26C22082B960C1B00D33EA5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				F241A9292BA0A29A00181611 /* MButton.swift */,
+				F241A92C2BA1E01C00181611 /* LoadingOverlay.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 				F20F73142B84EB7500705E08 /* File.swift in Sources */,
 				F26C22092B960C1B00D33EA5 /* ImagePicker.swift in Sources */,
 				F241A91F2B9C80D900181611 /* ContentView.swift in Sources */,
+				F241A92D2BA1E01C00181611 /* LoadingOverlay.swift in Sources */,
 				F26C22072B9609E800D33EA5 /* MocaaView.swift in Sources */,
 				F241A9272BA0893A00181611 /* WelcomeView.swift in Sources */,
 				F241A91D2B9C41DE00181611 /* SidePannel.swift in Sources */,

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FunctionView: View {
     @State private var inputImage: NSImage?
-    @State private var exifViewWidth: CGFloat = 200
+    @State private var exifViewWidth: CGFloat = 220
     @ObservedObject var viewModel: ImageEditorViewModel
 //    let imageView: ImageView // 传入ImageView实例
     
@@ -48,10 +48,12 @@ struct FunctionView: View {
             }, color: .green)
             
             MButton(text: "Fujifilm Style", action: {
-                guard let image = inputImage else { return }
+                guard let image = viewModel.originalImage else { return }
+                viewModel.isLoading = true
                 let fujiFilmImage = viewModel.applyFujiFilmStyle(to: image)
                 viewModel.originalImage = fujiFilmImage
                 viewModel.createCombinedImage(from: fujiFilmImage)
+                viewModel.isLoading = false
             }, color: .black)
 
             

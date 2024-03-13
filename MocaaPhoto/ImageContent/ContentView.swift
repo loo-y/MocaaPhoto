@@ -73,6 +73,7 @@ class ImageEditorViewModel: ObservableObject {
     @Published var originalImage: NSImage? = nil // 用于管理图片
     @Published var modifiedImage: NSImage? = nil
     @Published var combinedImage: NSImage? = nil
+    @Published var cameraInfo: CameraInfo = CameraInfo()
     @Published var isLoading: Bool = false
     
     @Published var text: String = "" // 用于管理文本
@@ -240,12 +241,12 @@ class ImageEditorViewModel: ObservableObject {
     }
     
     func createCombinedImage(from image: NSImage) {
-        let cameraInfo = getCameraInfo(from: originalImagePath)
+        cameraInfo = getCameraInfo(from: originalImagePath)
         print("EXIF", cameraInfo)
         
 
         
-        let aspectRatio: CGFloat = 16.0 / 9.0   // 3.0 / 2.0 //
+        let aspectRatio: CGFloat = 15.0 / 9.0 // 16.0 / 9.0   // 3.0 / 2.0 //
         let originalSize = image.size
         let newHeight = originalSize.height * 1.3  // 40% taller
         let newWidth = newHeight * aspectRatio // width according to the 16:9 aspect ratio

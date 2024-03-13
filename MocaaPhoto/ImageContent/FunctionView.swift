@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FunctionView: View {
     @State private var inputImage: NSImage?
+    @State private var exifViewWidth: CGFloat = 200
     @ObservedObject var viewModel: ImageEditorViewModel
 //    let imageView: ImageView // 传入ImageView实例
     
@@ -53,11 +54,57 @@ struct FunctionView: View {
                 viewModel.createCombinedImage(from: fujiFilmImage)
             }, color: .black)
 
+            
+            if !viewModel.cameraInfo.lensModel.isEmpty {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ExifLabelView(name: "Type", value: viewModel.cameraInfo.lensMake)
+                        ExifLabelView(name: "Model", value: viewModel.cameraInfo.lensModel)
+                        
+                        HStack{
+                            ExifLabelView(value: viewModel.cameraInfo.focalLength, width: exifViewWidth/2)
+                            ExifLabelView(value: viewModel.cameraInfo.iso, width: exifViewWidth/2)
+                        }
+                        
+                        HStack{
+                            ExifLabelView(value: viewModel.cameraInfo.shutterSpeed)
+                            ExifLabelView(value: viewModel.cameraInfo.aperture)
+                        }
+                    }
+                    .padding()
+                }
+                .frame(width: exifViewWidth, height: 300)
+            }
         }
         .frame(maxHeight: .infinity)
         .frame(width: 300)
 //        .background(Color.gray)
         .background(Color(red: 232, green: 232, blue: 232))
+    }
+}
+
+struct ExifLabelView: View {
+    var name: String?
+    var value: String
+    var width: CGFloat? = nil
+
+    var body: some View {
+        HStack {
+            if let name = name {
+                Text(name)
+                    .bold()
+            }
+            Spacer()
+            Text(value)
+            if name == nil {
+                Spacer()
+            }
+        }
+        .padding()
+        .background(Color(white: 0.95))
+        .cornerRadius(10)
+        .shadow(radius: 3)
+        .frame(width: width)
     }
 }
 
